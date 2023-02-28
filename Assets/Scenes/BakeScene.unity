@@ -134,9 +134,8 @@ GameObject:
   - component: {fileID: 28730419}
   - component: {fileID: 28730422}
   - component: {fileID: 28730421}
-  - component: {fileID: 28730420}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -157,19 +156,6 @@ Transform:
   m_Father: {fileID: 210155681}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &28730420
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 28730418}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &28730421
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -230,9 +216,9 @@ GameObject:
   m_Component:
   - component: {fileID: 210155681}
   m_Layer: 0
-  m_Name: RotationPoint_Target
+  m_Name: RotationPoint
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -244,13 +230,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 210155680}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.75, y: 2.5, z: 0.75}
+  m_LocalPosition: {x: -0.75, y: 2.187, z: 0.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 28730419}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &351566158
 PrefabInstance:
@@ -633,8 +619,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8e8fe2d35362874fb8bf6fbc2c8f32b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotateAroundTarget: {fileID: 210155681}
-  settings: {fileID: 11400000, guid: e91b136396245824a8ed990a37857eea, type: 2}
+  _rotateAroundTarget: {fileID: 210155681}
+  _settings: {fileID: 11400000, guid: e91b136396245824a8ed990a37857eea, type: 2}
 --- !u!1001 &759495409
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -880,7 +866,7 @@ Transform:
   - {fileID: 1714950500}
   - {fileID: 351566159}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1714950499
 PrefabInstance:
