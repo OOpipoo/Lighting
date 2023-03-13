@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 656172716746ad74cb7a1f3b436b6bac, type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: f61b872775ff6da4e9bd3b01cb22e7b7, type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -2832,7 +2832,7 @@ MonoBehaviour:
   useMultithreading: 1
   previousSelection: {fileID: 0}
   unloaded: 1
-  sceneChanging: 0
+  sceneChanging: 1
   waitForPrevious: 0
   previousVolume: {fileID: 0}
   optimizeForMixedLighting: 0
@@ -3896,7 +3896,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 8.53e-43, y: -6.85577e+10, z: 8.53e-43, w: 1e-45}
+  m_BoundingSphereOverride: {x: 8.53e-43, y: -4.917559e-18, z: 8.52e-43, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -4022,7 +4022,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 8.53e-43, y: -1.8363135e+12, z: 8.53e-43, w: 0}
+  m_BoundingSphereOverride: {x: 6.7094695e+22, y: 1.3702403e+13, z: 9.464415e+21, w: 6.345983e+16}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
