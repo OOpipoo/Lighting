@@ -30,13 +30,12 @@ namespace CodeBase
 
             if (mousePressed)
             {
-                CalculateManualRotation(mouseDelta);
+                CalculateRotation(mouseDelta);
             }
             else
             {
                 CalculateInertia(mouseDelta);
                 ApplyInertia();
-                ApplyElastic();
             }
 
             ApplyRotation(_currentRotationEuler);
@@ -57,12 +56,12 @@ namespace CodeBase
 
         private void ApplyInertia()
         {
-            if (!(_currentInertia.magnitude > float.Epsilon))
+            if (_currentInertia.sqrMagnitude < float.Epsilon)
             {
                 return;
             }
 
-            _currentInertia = DampVectorToZero(_currentInertia, _settings.InertiaDamp);
+            _currentInertia = DampToZero(_currentInertia, _settings.InertiaDamp);
             _currentRotationEuler += _currentInertia * Time.deltaTime;
 
             ResetInertiaIfRotationIsOutOfBounds();
@@ -70,41 +69,15 @@ namespace CodeBase
 
         private void ResetInertiaIfRotationIsOutOfBounds()
         {
-            if (!WithinRange(
-                    _currentRotationEuler.x,
-                    _settings.MinRotateAngle.x,
-                    _settings.MaxRotateAngle.x))
+            void ResetInertiaIfOutOfBounds(float rotation, float minAngle, float maxAngle, ref float inertia)
             {
-                _currentInertia.x = 0;
-            }
-
-            if (!WithinRange(
-                    _currentRotationEuler.y,
-                    _settings.MinRotateAngle.y,
-                    _settings.MaxRotateAngle.y))
-            {
-                _currentInertia.y = 0;
-            }
-        }
-
-        private void ApplyElastic()
-        {
-            var targetRotation = ClampVector(
-                _currentRotationEuler,
-                _settings.MinElasticAngle,
-                _settings.MaxElasticAngle);
-
-            var rotationX = Mathf.Lerp(
-                _currentRotationEuler.x,
-                targetRotation.x,
-                _settings._autoRotationSpeed.x * Time.deltaTime);
-
-            var rotationY = Mathf.Lerp(
-                _currentRotationEuler.y,
-                targetRotation.y,
-                _settings._autoRotationSpeed.y * Time.deltaTime);
-
-            _currentRotationEuler = new Vector2(rotationX, rotationY);
+                if (!WithinRange(rotation, minAngle, maxAngle))
+                {
+                    inertia = 0;
+                }
+            } 
+            ResetInertiaIfOutOfBounds(_currentRotationEuler.x, _settings.MinRotateAngle.x, _settings.MaxRotateAngle.x, ref _currentInertia.x);
+            ResetInertiaIfOutOfBounds(_currentRotationEuler.y, _settings.MinRotateAngle.y, _settings.MaxRotateAngle.y, ref _currentInertia.y);
         }
 
         private void CreateAnchor()
@@ -133,36 +106,36 @@ namespace CodeBase
             return mouseDelta;
         }
 
-        private void CalculateManualRotation(Vector2 delta)
+        private void CalculateRotation(Vector2 delta)
         {
             var speed = _settings.Speed;
-            speed = DampRotationSpeed(speed);
-        
+            speed = DampRotation(speed);
+
             var speedX = delta.x * speed.x;
             var speedY = delta.y * speed.y;
             _rotationVelocityEuler = new Vector2(speedX, speedY);
 
             var newRotationEuler = _currentRotationEuler + _rotationVelocityEuler * Time.deltaTime;
-            newRotationEuler = ClampVector(
-                newRotationEuler, 
-                _settings.MinRotateAngle, 
+            newRotationEuler = Clamp(
+                newRotationEuler,
+                _settings.MinRotateAngle,
                 _settings.MaxRotateAngle);
-        
+
             _currentRotationEuler = newRotationEuler;
         }
 
-        private Vector2 DampRotationSpeed(Vector2 speed)
+        private Vector2 DampRotation(Vector2 speed)
         {
             var dampValueX = InverseLerpBetweenTwoRanges(
                 _currentRotationEuler.x,
                 new Vector2(_settings.MaxElasticAngle.x, _settings.MaxRotateAngle.x),
                 new Vector2(_settings.MinElasticAngle.x, _settings.MinRotateAngle.x));
-        
+
             var dampValueY = InverseLerpBetweenTwoRanges(
                 _currentRotationEuler.y,
                 new Vector2(_settings.MaxElasticAngle.y, _settings.MaxRotateAngle.y),
                 new Vector2(_settings.MinElasticAngle.y, _settings.MinRotateAngle.y));
-        
+
             return new Vector2(speed.x * dampValueX, speed.y * dampValueY);
         }
 
@@ -181,30 +154,30 @@ namespace CodeBase
             return 1f;
         }
 
-        private static Vector2 ClampVector(Vector2 value, Vector2 min, Vector2 max)
+        private static Vector2 Clamp(Vector2 value, Vector2 min, Vector2 max)
         {
             return new Vector2(
                 Mathf.Clamp(value.x, min.x, max.x),
                 Mathf.Clamp(value.y, min.y, max.y));
         }
 
-        private static Vector2 DampVectorToZero(Vector2 value, Vector2 dampValue)
+        private static Vector2 DampToZero(Vector2 value, Vector2 dampValue)
         {
-            value.x = DampValueToZero(value.x, dampValue.x);
-            value.y = DampValueToZero(value.y, dampValue.y);
-            return value;
+            return new Vector2(
+                DampToZero(value.x, dampValue.x),
+                DampToZero(value.y, dampValue.y));
         }
 
-        private static float DampValueToZero(float value, float dampFactor)
+        private static float DampToZero(float value, float dampFactor)
         {
-            if (value != 0)
+            if (Mathf.Approximately(value, 0f))
             {
-                return value > 0
-                    ? Mathf.Max(0, value - dampFactor)
-                    : Mathf.Min(0, value + dampFactor);
+                return 0f;
             }
 
-            return 0f;
+            return value > 0
+                ? Mathf.Max(0f, value - dampFactor)
+                : Mathf.Min(0f, value + dampFactor);
         }
 
         private static bool WithinRange(float value, float min, float max)
